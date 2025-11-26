@@ -302,6 +302,5 @@ export default function Chat() {
   );
 }
 
-}
 
 
