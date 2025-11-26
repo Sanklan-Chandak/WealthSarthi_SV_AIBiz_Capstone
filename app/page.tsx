@@ -9,19 +9,11 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useChat } from "@ai-sdk/react";
-import { ArrowUp, Loader2, Plus, Square } from "lucide-react";
+import { ArrowUp, Loader2, Square } from "lucide-react";
 import { MessageWall } from "@/components/messages/message-wall";
-import { ChatHeader, ChatHeaderBlock } from "@/app/parts/chat-header";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UIMessage } from "ai";
 import { useEffect, useState, useRef } from "react";
-import {
-  AI_NAME,
-  CLEAR_CHAT_TEXT,
-  OWNER_NAME,
-  WELCOME_MESSAGE,
-} from "@/config";
-import Image from "next/image";
+import { AI_NAME, OWNER_NAME, WELCOME_MESSAGE } from "@/config";
 import Link from "next/link";
 
 const formSchema = z.object({
@@ -158,57 +150,11 @@ export default function Chat() {
     form.reset();
   }
 
-  function clearChat() {
-    const newMessages: UIMessage[] = [];
-    const newDurations = {};
-    setMessages(newMessages);
-    setDurations(newDurations);
-    saveMessagesToStorage(newMessages, newDurations);
-    toast.success("Chat cleared");
-  }
-
   return (
     <div className="min-h-screen font-sans bg-gradient-to-br from-sky-50 via-slate-50 to-sky-100 text-slate-900">
       <main className="w-full min-h-screen relative">
-        {/* Header */}
-        <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-white/95 via-white/90 to-white/0 backdrop-blur-md pb-4 border-b border-slate-200">
-          <div className="relative">
-            <ChatHeader>
-              <ChatHeaderBlock />
-              <ChatHeaderBlock className="justify-center items-center gap-3">
-                <div className="flex items-center justify-center rounded-full bg-emerald-100 border border-emerald-300 h-9 w-9">
-                  {/* Finance buddy logo – update /logo.png with your icon */}
-                  <Avatar className="h-8 w-8 bg-transparent border-0">
-                    <AvatarImage src="/logo.png" />
-                    <AvatarFallback>₹</AvatarFallback>
-                  </Avatar>
-                </div>
-                <div className="flex flex-col">
-                  <p className="tracking-tight text-sm font-semibold text-slate-900">
-                    Chat with {AI_NAME}
-                  </p>
-                  <p className="text-[11px] text-slate-500">
-                    India-first personal finance copilot
-                  </p>
-                </div>
-              </ChatHeaderBlock>
-              <ChatHeaderBlock className="justify-end">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="cursor-pointer bg-white text-slate-900 border-slate-300 hover:bg-slate-50"
-                  onClick={clearChat}
-                >
-                  <Plus className="size-4" />
-                  {CLEAR_CHAT_TEXT}
-                </Button>
-              </ChatHeaderBlock>
-            </ChatHeader>
-          </div>
-        </div>
-
         {/* Main content */}
-        <div className="px-5 py-4 w-full pt-[96px] pb-[150px]">
+        <div className="px-5 py-4 w-full pt-8 pb-[150px]">
           <div className="flex flex-col items-center justify-start min-h-full">
             {isClient ? (
               <>
@@ -341,19 +287,21 @@ export default function Chat() {
               Terms of Use
             </Link>
             &nbsp;Powered by{" "}
-              <Link
-                href="https://ringel.ai/"
-                target="_blank"
-                rel="noreferrer"
-                className="underline"
-              >
-                Ringel.AI
-              </Link>
+            <Link
+              href="https://ringel.ai/"
+              target="_blank"
+              rel="noreferrer"
+              className="underline"
+            >
+              Ringel.AI
+            </Link>
           </div>
         </div>
       </main>
     </div>
   );
+}
+
 }
 
 
