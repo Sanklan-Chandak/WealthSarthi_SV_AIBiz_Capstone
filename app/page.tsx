@@ -6,21 +6,21 @@ import { toast } from "sonner";
 import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
-import {
-  Field,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useChat } from "@ai-sdk/react";
-import { ArrowUp, Eraser, Loader2, Plus, PlusIcon, Square } from "lucide-react";
+import { ArrowUp, Loader2, Plus, Square } from "lucide-react";
 import { MessageWall } from "@/components/messages/message-wall";
-import { ChatHeader } from "@/app/parts/chat-header";
-import { ChatHeaderBlock } from "@/app/parts/chat-header";
+import { ChatHeader, ChatHeaderBlock } from "@/app/parts/chat-header";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UIMessage } from "ai";
 import { useEffect, useState, useRef } from "react";
-import { AI_NAME, CLEAR_CHAT_TEXT, OWNER_NAME, WELCOME_MESSAGE } from "@/config";
+import {
+  AI_NAME,
+  CLEAR_CHAT_TEXT,
+  OWNER_NAME,
+  WELCOME_MESSAGE,
+} from "@/config";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -31,15 +31,18 @@ const formSchema = z.object({
     .max(2000, "Message must be at most 2000 characters."),
 });
 
-const STORAGE_KEY = 'chat-messages';
+const STORAGE_KEY = "chat-messages";
 
 type StorageData = {
   messages: UIMessage[];
   durations: Record<string, number>;
 };
 
-const loadMessagesFromStorage = (): { messages: UIMessage[]; durations: Record<string, number> } => {
-  if (typeof window === 'undefined') return { messages: [], durations: {} };
+const loadMessagesFromStorage = (): {
+  messages: UIMessage[];
+  durations: Record<string, number>;
+} => {
+  if (typeof window === "undefined") return { messages: [], durations: {} };
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (!stored) return { messages: [], durations: {} };
@@ -50,27 +53,40 @@ const loadMessagesFromStorage = (): { messages: UIMessage[]; durations: Record<s
       durations: parsed.durations || {},
     };
   } catch (error) {
-    console.error('Failed to load messages from localStorage:', error);
+    console.error("Failed to load messages from localStorage:", error);
     return { messages: [], durations: {} };
   }
 };
 
-const saveMessagesToStorage = (messages: UIMessage[], durations: Record<string, number>) => {
-  if (typeof window === 'undefined') return;
+const saveMessagesToStorage = (
+  messages: UIMessage[],
+  durations: Record<string, number>,
+) => {
+  if (typeof window === "undefined") return;
   try {
     const data: StorageData = { messages, durations };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   } catch (error) {
-    console.error('Failed to save messages to localStorage:', error);
+    console.error("Failed to save messages to localStorage:", error);
   }
 };
+
+const SUGGESTED_QUERIES = [
+  "Help me create a monthly budget for a ₹60,000 salary",
+  "How much SIP per month to reach ₹10 lakh in 5 years at 12% returns?",
+  "Explain the difference between FD, RD and SIP in simple terms",
+  "I want to build an emergency fund. How much should I save?",
+];
 
 export default function Chat() {
   const [isClient, setIsClient] = useState(false);
   const [durations, setDurations] = useState<Record<string, number>>({});
   const welcomeMessageShownRef = useRef<boolean>(false);
 
-  const stored = typeof window !== 'undefined' ? loadMessagesFromStorage() : { messages: [], durations: {} };
+  const stored =
+    typeof window !== "undefined"
+      ? loadMessagesFromStorage()
+      : { messages: [], durations: {} };
   const [initialMessages] = useState<UIMessage[]>(stored.messages);
 
   const { messages, sendMessage, status, stop, setMessages } = useChat({
@@ -81,6 +97,7 @@ export default function Chat() {
     setIsClient(true);
     setDurations(stored.durations);
     setMessages(stored.messages);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -98,7 +115,11 @@ export default function Chat() {
   };
 
   useEffect(() => {
-    if (isClient && initialMessages.length === 0 && !welcomeMessageShownRef.current) {
+    if (
+      isClient &&
+      initialMessages.length === 0 &&
+      !welcomeMessageShownRef.current
+    ) {
       const welcomeMessage: UIMessage = {
         id: `welcome-${Date.now()}`,
         role: "assistant",
@@ -122,6 +143,16 @@ export default function Chat() {
     },
   });
 
+  const showIntro = messages.length <= 1;
+
+  const handleSuggestionClick = (value: string) => {
+    form.setValue("message", value);
+    const el = document.getElementById(
+      "chat-form-message",
+    ) as HTMLInputElement | null;
+    el?.focus();
+  };
+
   function onSubmit(data: z.infer<typeof formSchema>) {
     sendMessage({ text: data.message });
     form.reset();
@@ -137,22 +168,28 @@ export default function Chat() {
   }
 
   return (
-    <div className="flex h-screen items-center justify-center font-sans dark:bg-black">
-      <main className="w-full dark:bg-black h-screen relative">
-        <div className="fixed top-0 left-0 right-0 z-50 bg-linear-to-b from-background via-background/50 to-transparent dark:bg-black overflow-visible pb-16">
-          <div className="relative overflow-visible">
+    <div className="min-h-screen font-sans bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-50">
+      <main className="w-full min-h-screen relative">
+        {/* Header */}
+        <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-background/95 via-background/90 to-background/0 dark:from-slate-950/95 dark:via-slate-950/90 dark:to-slate-950/0 backdrop-blur-md pb-4 border-b border-border/60">
+          <div className="relative">
             <ChatHeader>
               <ChatHeaderBlock />
               <ChatHeaderBlock className="justify-center items-center">
-                <Avatar
-                  className="size-8 ring-1 ring-primary"
-                >
+                <Avatar className="size-8 ring-1 ring-primary">
                   <AvatarImage src="/logo.png" />
                   <AvatarFallback>
                     <Image src="/logo.png" alt="Logo" width={36} height={36} />
                   </AvatarFallback>
                 </Avatar>
-                <p className="tracking-tight">Chat with {AI_NAME}</p>
+                <div className="flex flex-col">
+                  <p className="tracking-tight text-sm font-semibold">
+                    Chat with {AI_NAME}
+                  </p>
+                  <p className="text-[11px] text-muted-foreground">
+                    India-first personal finance copilot
+                  </p>
+                </div>
               </ChatHeaderBlock>
               <ChatHeaderBlock className="justify-end">
                 <Button
@@ -168,16 +205,58 @@ export default function Chat() {
             </ChatHeader>
           </div>
         </div>
-        <div className="h-screen overflow-y-auto px-5 py-4 w-full pt-[88px] pb-[150px]">
-          <div className="flex flex-col items-center justify-end min-h-full">
+
+        {/* Main content */}
+        <div className="px-5 py-4 w-full pt-[96px] pb-[150px]">
+          <div className="flex flex-col items-center justify-start min-h-full">
             {isClient ? (
               <>
-                <MessageWall messages={messages} status={status} durations={durations} onDurationChange={handleDurationChange} />
-                {status === "submitted" && (
-                  <div className="flex justify-start max-w-3xl w-full">
-                    <Loader2 className="size-4 animate-spin text-muted-foreground" />
+                {showIntro && (
+                  <div className="w-full max-w-3xl mb-6 text-center text-sm text-muted-foreground space-y-4">
+                    <div>
+                      <h1 className="text-2xl md:text-3xl font-semibold text-foreground mb-2">
+                        Plan your dreams with{" "}
+                        <span className="text-primary">{AI_NAME}</span>
+                      </h1>
+                      <p>
+                        Ask anything about budgeting, SIPs, FDs, goals and money
+                        basics in India. Wealth Sarthi explains without giving
+                        stock tips or pushing products.
+                      </p>
+                    </div>
+                    <div className="grid gap-2 w-full md:grid-cols-2">
+                      {SUGGESTED_QUERIES.map((q) => (
+                        <button
+                          key={q}
+                          type="button"
+                          onClick={() => handleSuggestionClick(q)}
+                          className="rounded-2xl border border-border bg-card/60 px-4 py-3 text-left text-xs md:text-sm text-foreground hover:border-primary/60 hover:bg-card transition"
+                        >
+                          {q}
+                        </button>
+                      ))}
+                    </div>
+                    <p className="text-[11px] text-muted-foreground max-w-md mx-auto">
+                      Disclaimer: This assistant is for educational purposes
+                      only. It does not provide personalized investment, tax, or
+                      legal advice.
+                    </p>
                   </div>
                 )}
+
+                <div className="w-full max-w-3xl">
+                  <MessageWall
+                    messages={messages}
+                    status={status}
+                    durations={durations}
+                    onDurationChange={handleDurationChange}
+                  />
+                  {status === "submitted" && (
+                    <div className="flex justify-start w-full mt-3">
+                      <Loader2 className="size-4 animate-spin text-muted-foreground" />
+                    </div>
+                  )}
+                </div>
               </>
             ) : (
               <div className="flex justify-center max-w-2xl w-full">
@@ -186,8 +265,10 @@ export default function Chat() {
             )}
           </div>
         </div>
-        <div className="fixed bottom-0 left-0 right-0 z-50 bg-linear-to-t from-background via-background/50 to-transparent dark:bg-black overflow-visible pt-13">
-          <div className="w-full px-5 pt-5 pb-1 items-center flex justify-center relative overflow-visible">
+
+        {/* Bottom input + footer */}
+        <div className="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-t from-background/95 via-background/90 to-background/0 dark:from-slate-950/95 dark:via-slate-950/90 dark:to-slate-950/0 backdrop-blur-md pt-4">
+          <div className="w-full px-5 pt-3 pb-1 items-center flex justify-center relative overflow-visible">
             <div className="message-fade-overlay" />
             <div className="max-w-3xl w-full">
               <form id="chat-form" onSubmit={form.handleSubmit(onSubmit)}>
@@ -197,15 +278,18 @@ export default function Chat() {
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="chat-form-message" className="sr-only">
+                        <FieldLabel
+                          htmlFor="chat-form-message"
+                          className="sr-only"
+                        >
                           Message
                         </FieldLabel>
                         <div className="relative h-13">
                           <Input
                             {...field}
                             id="chat-form-message"
-                            className="h-15 pr-15 pl-5 bg-card rounded-[20px]"
-                            placeholder="Type your message here..."
+                            className="h-12 pr-16 pl-5 bg-card/95 rounded-full border border-border/70 text-sm shadow-sm focus-visible:ring-2 focus-visible:ring-primary/70"
+                            placeholder="Ask Wealth Sarthi about your money..."
                             disabled={status === "streaming"}
                             aria-invalid={fieldState.invalid}
                             autoComplete="off"
@@ -216,9 +300,9 @@ export default function Chat() {
                               }
                             }}
                           />
-                          {(status == "ready" || status == "error") && (
+                          {(status === "ready" || status === "error") && (
                             <Button
-                              className="absolute right-3 top-3 rounded-full"
+                              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full"
                               type="submit"
                               disabled={!field.value.trim()}
                               size="icon"
@@ -226,9 +310,10 @@ export default function Chat() {
                               <ArrowUp className="size-4" />
                             </Button>
                           )}
-                          {(status == "streaming" || status == "submitted") && (
+                          {(status === "streaming" ||
+                            status === "submitted") && (
                             <Button
-                              className="absolute right-2 top-2 rounded-full"
+                              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full"
                               size="icon"
                               onClick={() => {
                                 stop();
@@ -246,10 +331,24 @@ export default function Chat() {
             </div>
           </div>
           <div className="w-full px-5 py-3 items-center flex justify-center text-xs text-muted-foreground">
-            © {new Date().getFullYear()} {OWNER_NAME}&nbsp;<Link href="/terms" className="underline">Terms of Use</Link>&nbsp;Powered by&nbsp;<Link href="https://ringel.ai/" className="underline">Ringel.AI</Link>
+            © {new Date().getFullYear()} {OWNER_NAME}&nbsp;
+            <span className="hidden sm:inline">All rights reserved.&nbsp;</span>
+            <Link href="/terms" className="underline">
+              Terms of Use
+            </Link>
+            &nbsp;Powered by{" "}
+            <Link
+              href="https://ringel.ai/"
+              target="_blank"
+              rel="noreferrer"
+              className="underline"
+            >
+              Ringel.AI
+            </Link>
           </div>
         </div>
       </main>
-    </div >
+    </div>
   );
 }
+
