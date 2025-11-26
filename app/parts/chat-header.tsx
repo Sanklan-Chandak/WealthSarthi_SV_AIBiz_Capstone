@@ -16,7 +16,7 @@ export function ChatHeaderBlock({
 
 export function ChatHeader({ children }: { children: React.ReactNode }) {
   return (
-    <div className="w-full flex items-center justify-between py-4 px-5 bg-gradient-to-b from-background/95 via-background/90 to-background/0 backdrop-blur-md border-b border-border/60">
+    <div className="w-full flex items-center justify-between py-4 px-5 bg-transparent">
       {children}
     </div>
   );
