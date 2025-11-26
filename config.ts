@@ -33,7 +33,7 @@ export const DATE_AND_TIME = getDateAndTime();
 export const AI_NAME = "Wealth Sarthi";
 export const OWNER_NAME = "Sanklan Chandak & Vedant Kaul";
 
-export const WELCOME_MESSAGE = `Plan Your Dreams`
+export const WELCOME_MESSAGE = ``
 
 export const CLEAR_CHAT_TEXT = "New";
 
