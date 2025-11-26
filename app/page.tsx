@@ -70,7 +70,7 @@ const saveMessagesToStorage = (
 
 const SUGGESTED_QUERIES = [
   "Help me create a monthly budget for a ₹60,000 salary",
-  "How much SIP per month to reach ₹10 lakh in 5 years at 12% returns?",
+  "I want to buy an Audi A4 in next 3 years, how i can plan?",
   "Explain the difference between FD, RD and SIP in simple terms",
   "I want to build an emergency fund. How much should I save?",
 ];
