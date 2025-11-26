@@ -168,25 +168,26 @@ export default function Chat() {
   }
 
   return (
-    <div className="min-h-screen font-sans bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-50">
+    <div className="min-h-screen font-sans bg-gradient-to-br from-sky-50 via-slate-50 to-sky-100 text-slate-900">
       <main className="w-full min-h-screen relative">
         {/* Header */}
-        <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-background/95 via-background/90 to-background/0 dark:from-slate-950/95 dark:via-slate-950/90 dark:to-slate-950/0 backdrop-blur-md pb-4 border-b border-border/60">
+        <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-white/95 via-white/90 to-white/0 backdrop-blur-md pb-4 border-b border-slate-200">
           <div className="relative">
             <ChatHeader>
               <ChatHeaderBlock />
-              <ChatHeaderBlock className="justify-center items-center">
-                <Avatar className="size-8 ring-1 ring-primary">
-                  <AvatarImage src="/logo.png" />
-                  <AvatarFallback>
-                    <Image src="/logo.png" alt="Logo" width={36} height={36} />
-                  </AvatarFallback>
-                </Avatar>
+              <ChatHeaderBlock className="justify-center items-center gap-3">
+                <div className="flex items-center justify-center rounded-full bg-emerald-100 border border-emerald-300 h-9 w-9">
+                  {/* Finance buddy logo – update /logo.png with your icon */}
+                  <Avatar className="h-8 w-8 bg-transparent border-0">
+                    <AvatarImage src="/logo.png" />
+                    <AvatarFallback>₹</AvatarFallback>
+                  </Avatar>
+                </div>
                 <div className="flex flex-col">
-                  <p className="tracking-tight text-sm font-semibold">
+                  <p className="tracking-tight text-sm font-semibold text-slate-900">
                     Chat with {AI_NAME}
                   </p>
-                  <p className="text-[11px] text-muted-foreground">
+                  <p className="text-[11px] text-slate-500">
                     India-first personal finance copilot
                   </p>
                 </div>
@@ -195,7 +196,7 @@ export default function Chat() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="cursor-pointer"
+                  className="cursor-pointer bg-white text-slate-900 border-slate-300 hover:bg-slate-50"
                   onClick={clearChat}
                 >
                   <Plus className="size-4" />
@@ -212,16 +213,17 @@ export default function Chat() {
             {isClient ? (
               <>
                 {showIntro && (
-                  <div className="w-full max-w-3xl mb-6 text-center text-sm text-muted-foreground space-y-4">
+                  <div className="w-full max-w-3xl mb-6 text-center text-sm text-slate-600 space-y-4">
                     <div>
-                      <h1 className="text-2xl md:text-3xl font-semibold text-foreground mb-2">
-                        Plan your dreams with{" "}
-                        <span className="text-primary">{AI_NAME}</span>
+                      <h1 className="text-xl md:text-2xl font-medium text-slate-800">
+                        Plan Your Dreams With
                       </h1>
-                      <p>
-                        Ask anything about budgeting, SIPs, FDs, goals and money
-                        basics in India. Wealth Sarthi explains without giving
-                        stock tips or pushing products.
+                      <h2 className="text-3xl md:text-4xl font-extrabold mt-1 tracking-tight text-emerald-600">
+                        Wealth Sarthi
+                      </h2>
+                      <p className="mt-3 text-sm md:text-base text-slate-600">
+                        Take control of your budgeting, savings and investments
+                        with our simple &amp; clear guidance.
                       </p>
                     </div>
                     <div className="grid gap-2 w-full md:grid-cols-2">
@@ -230,13 +232,13 @@ export default function Chat() {
                           key={q}
                           type="button"
                           onClick={() => handleSuggestionClick(q)}
-                          className="rounded-2xl border border-border bg-card/60 px-4 py-3 text-left text-xs md:text-sm text-foreground hover:border-primary/60 hover:bg-card transition"
+                          className="rounded-2xl border border-slate-200 bg-white/70 backdrop-blur-sm px-4 py-3 text-left text-xs md:text-sm text-slate-900 hover:border-emerald-400/80 hover:bg-white/90 transition"
                         >
                           {q}
                         </button>
                       ))}
                     </div>
-                    <p className="text-[11px] text-muted-foreground max-w-md mx-auto">
+                    <p className="text-[11px] text-slate-500 max-w-md mx-auto">
                       Disclaimer: This assistant is for educational purposes
                       only. It does not provide personalized investment, tax, or
                       legal advice.
@@ -253,21 +255,21 @@ export default function Chat() {
                   />
                   {status === "submitted" && (
                     <div className="flex justify-start w-full mt-3">
-                      <Loader2 className="size-4 animate-spin text-muted-foreground" />
+                      <Loader2 className="size-4 animate-spin text-slate-500" />
                     </div>
                   )}
                 </div>
               </>
             ) : (
               <div className="flex justify-center max-w-2xl w-full">
-                <Loader2 className="size-4 animate-spin text-muted-foreground" />
+                <Loader2 className="size-4 animate-spin text-slate-500" />
               </div>
             )}
           </div>
         </div>
 
         {/* Bottom input + footer */}
-        <div className="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-t from-background/95 via-background/90 to-background/0 dark:from-slate-950/95 dark:via-slate-950/90 dark:to-slate-950/0 backdrop-blur-md pt-4">
+        <div className="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-t from-white/95 via-white/90 to-white/0 backdrop-blur-md pt-4 border-t border-slate-200/70">
           <div className="w-full px-5 pt-3 pb-1 items-center flex justify-center relative overflow-visible">
             <div className="message-fade-overlay" />
             <div className="max-w-3xl w-full">
@@ -288,7 +290,7 @@ export default function Chat() {
                           <Input
                             {...field}
                             id="chat-form-message"
-                            className="h-12 pr-16 pl-5 bg-card/95 rounded-full border border-border/70 text-sm shadow-sm focus-visible:ring-2 focus-visible:ring-primary/70"
+                            className="h-12 pr-16 pl-5 bg-white rounded-full border border-slate-300 text-sm text-slate-900 shadow-sm focus-visible:ring-2 focus-visible:ring-emerald-500/70"
                             placeholder="Ask Wealth Sarthi about your money..."
                             disabled={status === "streaming"}
                             aria-invalid={fieldState.invalid}
@@ -302,7 +304,7 @@ export default function Chat() {
                           />
                           {(status === "ready" || status === "error") && (
                             <Button
-                              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full"
+                              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-emerald-500 text-white hover:bg-emerald-400"
                               type="submit"
                               disabled={!field.value.trim()}
                               size="icon"
@@ -313,7 +315,7 @@ export default function Chat() {
                           {(status === "streaming" ||
                             status === "submitted") && (
                             <Button
-                              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full"
+                              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-slate-800 text-white hover:bg-slate-700"
                               size="icon"
                               onClick={() => {
                                 stop();
@@ -330,25 +332,28 @@ export default function Chat() {
               </form>
             </div>
           </div>
-          <div className="w-full px-5 py-3 items-center flex justify-center text-xs text-muted-foreground">
+          <div className="w-full px-5 py-3 items-center flex justify-center text-xs text-slate-500">
             © {new Date().getFullYear()} {OWNER_NAME}&nbsp;
-            <span className="hidden sm:inline">All rights reserved.&nbsp;</span>
+            <span className="hidden sm:inline">
+              All rights reserved.&nbsp;
+            </span>
             <Link href="/terms" className="underline">
               Terms of Use
             </Link>
             &nbsp;Powered by{" "}
-            <Link
-              href="https://ringel.ai/"
-              target="_blank"
-              rel="noreferrer"
-              className="underline"
-            >
-              Ringel.AI
-            </Link>
+              <Link
+                href="https://ringel.ai/"
+                target="_blank"
+                rel="noreferrer"
+                className="underline"
+              >
+                Ringel.AI
+              </Link>
           </div>
         </div>
       </main>
     </div>
   );
 }
+
 
