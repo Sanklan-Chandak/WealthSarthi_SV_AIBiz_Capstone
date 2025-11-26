@@ -69,7 +69,7 @@ const saveMessagesToStorage = (
 };
 
 const SUGGESTED_QUERIES = [
-  "Help me create a monthly budget for a ₹60,000 salary",
+  "I want to save 7 Lakhs in next 2 years, Help me create a monthly budget & investment plan for a ₹60,000 salary",
   "I want to buy an Audi A4 in next 3 years, how i can plan?",
   "Explain the difference between FD, RD and SIP in simple terms",
   "I want to build an emergency fund. How much should I save?",
