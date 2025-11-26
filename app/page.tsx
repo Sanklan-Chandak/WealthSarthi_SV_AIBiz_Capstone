@@ -9,11 +9,16 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useChat } from "@ai-sdk/react";
-import { ArrowUp, Loader2, Square } from "lucide-react";
+import { ArrowUp, Loader2, Plus, Square } from "lucide-react";
 import { MessageWall } from "@/components/messages/message-wall";
 import { UIMessage } from "ai";
 import { useEffect, useState, useRef } from "react";
-import { AI_NAME, OWNER_NAME, WELCOME_MESSAGE } from "@/config";
+import {
+  AI_NAME,
+  CLEAR_CHAT_TEXT,
+  OWNER_NAME,
+  WELCOME_MESSAGE,
+} from "@/config";
 import Link from "next/link";
 
 const formSchema = z.object({
@@ -150,11 +155,33 @@ export default function Chat() {
     form.reset();
   }
 
+  function clearChat() {
+    const newMessages: UIMessage[] = [];
+    const newDurations = {};
+    setMessages(newMessages);
+    setDurations(newDurations);
+    saveMessagesToStorage(newMessages, newDurations);
+    toast.success("Chat cleared");
+  }
+
   return (
     <div className="min-h-screen font-sans bg-gradient-to-br from-sky-50 via-slate-50 to-sky-100 text-slate-900">
       <main className="w-full min-h-screen relative">
+        {/* Floating New button only */}
+        <div className="fixed top-5 right-5 z-50">
+          <Button
+            variant="outline"
+            size="sm"
+            className="cursor-pointer bg-white text-slate-900 border-slate-300 hover:bg-slate-50 shadow"
+            onClick={clearChat}
+          >
+            <Plus className="size-4" />
+            {CLEAR_CHAT_TEXT}
+          </Button>
+        </div>
+
         {/* Main content */}
-        <div className="px-5 py-4 w-full pt-8 pb-[150px]">
+        <div className="px-5 py-4 w-full pt-16 pb-[150px]">
           <div className="flex flex-col items-center justify-start min-h-full">
             {isClient ? (
               <>
@@ -301,6 +328,3 @@ export default function Chat() {
     </div>
   );
 }
-
-
-
