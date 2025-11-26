@@ -195,7 +195,7 @@ export default function Chat() {
                         Wealth Sarthi
                       </h2>
                       <p className="mt-3 text-sm md:text-base text-slate-600">
-                        Take control of your budgeting, savings and investments
+                        Take control of your budgeting, savings, taxes and investments
                         with our simple &amp; clear guidance.
                       </p>
                     </div>
