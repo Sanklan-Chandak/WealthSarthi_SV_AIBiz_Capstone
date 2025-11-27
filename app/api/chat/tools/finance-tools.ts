@@ -3,7 +3,7 @@ import { tool } from "ai";
 import { z } from "zod";
 import {
   getMutualFundNav,
-  getNseIndexQuote,
+  getNseStockQuote,
   getGoldPriceInInr,
   getFxRateInrTo,
   getCryptoPriceInInr,
@@ -28,18 +28,18 @@ export const mutualFundNav = tool({
   },
 });
 
-// 2) NSE index quote (NIFTY 50, NIFTY BANK, etc.)
-export const nseIndexQuote = tool({
+// 2) NSE stock quote (Indian stocks)
+export const nseStockQuote = tool({
   description:
-    'Get the latest value and daily change for an Indian index like "NIFTY 50" or "NIFTY BANK".',
+    "Get the latest Indian stock quote (primarily NSE) for a given symbol, e.g. RELIANCE, TCS, HDFCBANK.",
   inputSchema: z.object({
-    indexName: z
+    symbol: z
       .string()
       .min(1)
-      .describe('Index name, e.g. "NIFTY 50", "NIFTY BANK".'),
+      .describe("Stock symbol, e.g. RELIANCE, TCS, HDFCBANK."),
   }),
-  execute: async ({ indexName }) => {
-    const quote = await getNseIndexQuote(indexName);
+  execute: async ({ symbol }) => {
+    const quote = await getNseStockQuote(symbol);
     return quote;
   },
 });
