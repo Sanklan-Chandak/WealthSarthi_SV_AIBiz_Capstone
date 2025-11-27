@@ -11,7 +11,7 @@ import {
   getGlobalQuote,
   getGrowwMfMeta,
   getYahooFinanceQuote,
-} from "@/lib/lib/finance-apis";
+} from "@/lib/finance-apis";
 
 // 1) Mutual Fund NAV (India)
 export const mutualFundNav = tool({
