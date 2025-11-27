@@ -3,7 +3,6 @@ import { tool } from "ai";
 import { z } from "zod";
 import {
   getMutualFundNav,
-  getNseStockQuote,
   getNseIndexQuote,
   getGoldPriceInInr,
   getFxRateInrTo,
@@ -29,23 +28,7 @@ export const mutualFundNav = tool({
   },
 });
 
-// 2) NSE stock quote (Indian stocks)
-export const nseStockQuote = tool({
-  description:
-    "Get the latest Indian stock quote (primarily NSE) for a given symbol, e.g. RELIANCE, TCS, HDFCBANK.",
-  inputSchema: z.object({
-    symbol: z
-      .string()
-      .min(1)
-      .describe("Stock symbol, e.g. RELIANCE, TCS, HDFCBANK."),
-  }),
-  execute: async ({ symbol }) => {
-    const quote = await getNseStockQuote(symbol);
-    return quote;
-  },
-});
-
-// 3) NSE index quote (NIFTY 50, NIFTY BANK, etc.)
+// 2) NSE index quote (NIFTY 50, NIFTY BANK, etc.)
 export const nseIndexQuote = tool({
   description:
     'Get the latest value and daily change for an Indian index like "NIFTY 50" or "NIFTY BANK".',
@@ -61,7 +44,7 @@ export const nseIndexQuote = tool({
   },
 });
 
-// 4) Gold price in INR
+// 3) Gold price in INR
 export const goldPriceInInr = tool({
   description:
     "Get the latest gold price in INR (per gram and per ounce) using GoldAPI.",
@@ -72,7 +55,7 @@ export const goldPriceInInr = tool({
   },
 });
 
-// 5) FX rate: INR -> target currency (USD, EUR, etc.)
+// 4) FX rate: INR -> target currency (USD, EUR, etc.)
 export const fxRateInrTo = tool({
   description:
     "Get the latest FX rate from INR to a target currency like USD, EUR, GBP.",
@@ -88,7 +71,7 @@ export const fxRateInrTo = tool({
   },
 });
 
-// 6) Crypto price in INR (CoinGecko)
+// 5) Crypto price in INR (CoinGecko)
 export const cryptoPriceInInr = tool({
   description:
     'Get the latest INR price for a cryptocurrency using its CoinGecko id, e.g. "bitcoin", "ethereum".',
@@ -104,7 +87,7 @@ export const cryptoPriceInInr = tool({
   },
 });
 
-// 7) Global stock quote via FMP (US/global symbols)
+// 6) Global stock quote via FMP (US/global symbols)
 export const globalStockQuote = tool({
   description:
     "Get the latest global stock quote (e.g., AAPL, MSFT) via Financial Modeling Prep.",
@@ -120,7 +103,7 @@ export const globalStockQuote = tool({
   },
 });
 
-// 8) Mutual fund metadata via Groww
+// 7) Mutual fund metadata via Groww
 export const mutualFundMeta = tool({
   description:
     "Get basic metadata for an Indian mutual fund (name, category, risk) by scheme code via Groww.",
@@ -136,7 +119,7 @@ export const mutualFundMeta = tool({
   },
 });
 
-// 9) Yahoo Finance quote via RapidAPI
+// 8) Yahoo Finance quote via RapidAPI
 export const yahooFinanceQuote = tool({
   description:
     "Get market data for any symbol from Yahoo Finance via RapidAPI (works for NSE, BSE, US stocks, indices, ETFs, etc.).",
