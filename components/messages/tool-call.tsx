@@ -1,5 +1,5 @@
 import { ToolCallPart, ToolResultPart } from "ai";
-import { Book, Globe, Search, Presentation, Wrench } from "lucide-react";
+import { Book, Globe, Search, Presentation, Wrench, Coins, Database } from "lucide-react";
 import { Shimmer } from "../ai-elements/shimmer";
 
 export interface ToolDisplay {
