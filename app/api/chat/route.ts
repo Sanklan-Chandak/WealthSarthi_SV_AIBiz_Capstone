@@ -7,7 +7,7 @@ import { webSearch } from './tools/web-search';
 import { vectorDatabaseSearch } from './tools/search-vector-database';
 import {
   mutualFundNav,
-  nseIndexQuote,
+  nseStockQuote,
   goldPriceInInr,
   fxRateInrTo,
   cryptoPriceInInr,
@@ -77,7 +77,7 @@ export async function POST(req: Request) {
             webSearch,
             vectorDatabaseSearch,
             mutualFundNav,
-            nseIndexQuote,
+            nseStockQuote,
             goldPriceInInr,
             fxRateInrTo,
             cryptoPriceInInr,
