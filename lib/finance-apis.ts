@@ -149,67 +149,6 @@ export async function getNseStockQuote(symbol: string): Promise<StockQuote> {
   };
 }
 
-// -------------------------------
-// 3) Indian Index Quote (NIFTY 50, BANK NIFTY, etc.)
-// Uses NSE’s unofficial but stable JSON endpoint
-// -------------------------------
-
-export interface IndexQuote {
-  index: string;
-  last: number;
-  change: number;
-  pChange: number;
-}
-
-export async function getNseIndexQuote(
-  indexName: string
-): Promise<IndexQuote> {
-  const url = "https://www.nseindia.com/api/allIndices";
-
-  const data = await fetchJson<any>(
-    url,
-    {},
-    {
-      Referer: "https://www.nseindia.com/market-data/live-market-indices",
-      "Accept-Language": "en-US,en;q=0.9",
-    }
-  );
-
-  const list: any[] = Array.isArray(data?.data) ? data.data : [];
-
-  const match = list.find(
-    (idx) =>
-      String(idx?.index || "").toUpperCase() ===
-      indexName.toUpperCase()
-  );
-
-  if (!match) {
-    throw new Error(`Index "${indexName}" not found on NSE`);
-  }
-
-  const last = Number(match.last);
-  const change = Number(
-    match.change ?? match.variation ?? match.pointsChange
-  );
-  const pChange = Number(
-    match.pChange ??
-      match.percentChange ??
-      match.percentageChange
-  );
-
-  if (!Number.isFinite(last)) {
-    throw new Error(
-      `Invalid index last value for "${indexName}": ${match.last}`
-    );
-  }
-
-  return {
-    index: String(match.index),
-    last,
-    change: Number.isFinite(change) ? change : 0,
-    pChange: Number.isFinite(pChange) ? pChange : 0,
-  };
-}
 
 // -------------------------------
 // 4) Gold Price in INR (GoldAPI)
