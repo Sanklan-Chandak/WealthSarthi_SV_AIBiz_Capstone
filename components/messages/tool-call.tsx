@@ -30,6 +30,60 @@ const TOOL_DISPLAY_MAP: Record<string, ToolDisplay> = {
         result_icon: <Search className="w-4 h-4" />,
         formatArgs: formatWebSearchArgs,
     },
+  mutualFundNav: {
+    call_label: "Fetching mutual fund NAV",
+    call_icon: <Book className="w-4 h-4" />,
+    result_label: "Fetched mutual fund NAV",
+    result_icon: <Book className="w-4 h-4" />,
+  },
+  nseStockQuote: {
+    call_label: "Fetching NSE stock quote",
+    call_icon: <Globe className="w-4 h-4" />,
+    result_label: "Fetched NSE stock quote",
+    result_icon: <Globe className="w-4 h-4" />,
+  },
+  nseIndexQuote: {
+    call_label: "Fetching index quote",
+    call_icon: <Presentation className="w-4 h-4" />,
+    result_label: "Fetched index quote",
+    result_icon: <Presentation className="w-4 h-4" />,
+  },
+  goldPriceInInr: {
+    call_label: "Fetching gold price",
+    call_icon: <Coins className="w-4 h-4" />,
+    result_label: "Fetched gold price",
+    result_icon: <Coins className="w-4 h-4" />,
+  },
+  fxRateInrTo: {
+    call_label: "Fetching FX rate",
+    call_icon: <Globe className="w-4 h-4" />,
+    result_label: "Fetched FX rate",
+    result_icon: <Globe className="w-4 h-4" />,
+  },
+  cryptoPriceInInr: {
+    call_label: "Fetching crypto price",
+    call_icon: <Globe className="w-4 h-4" />,
+    result_label: "Fetched crypto price",
+    result_icon: <Globe className="w-4 h-4" />,
+  },
+  globalStockQuote: {
+    call_label: "Fetching global stock quote",
+    call_icon: <Globe className="w-4 h-4" />,
+    result_label: "Fetched global stock quote",
+    result_icon: <Globe className="w-4 h-4" />,
+  },
+  mutualFundMeta: {
+    call_label: "Fetching mutual fund details",
+    call_icon: <Book className="w-4 h-4" />,
+    result_label: "Fetched mutual fund details",
+    result_icon: <Book className="w-4 h-4" />,
+  },
+  yahooFinanceQuote: {
+    call_label: "Fetching Yahoo Finance quote",
+    call_icon: <Globe className="w-4 h-4" />,
+    result_label: "Fetched Yahoo Finance quote",
+    result_icon: <Globe className="w-4 h-4" />,
+  },
 };
 
 const DEFAULT_TOOL_DISPLAY: ToolDisplay = { call_label: "Using tool", call_icon: <Wrench className="w-4 h-4" />, result_label: "Used tool", result_icon: <Wrench className="w-4 h-4" /> };
