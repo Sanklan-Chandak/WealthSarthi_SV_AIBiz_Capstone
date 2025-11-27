@@ -91,67 +91,71 @@ export async function getMutualFundNav(
 }
 
 // -------------------------------
-// 2) Indian Stock Quote (NSE/BSE)
-// via Indian Stock Market API (stable open API)
+// 2) Indian Index Quote (NIFTY 50, BANK NIFTY, etc.)
+// Uses NSE’s unofficial but stable JSON endpoint
 // -------------------------------
 
-export interface StockQuote {
-  symbol: string;
-  lastPrice: number;
+export interface IndexQuote {
+  index: string;
+  last: number;
   change: number;
   pChange: number;
-  open?: number;
-  high?: number;
-  low?: number;
-  previousClose?: number;
 }
 
-/**
- * Real-time Indian stock quote using:
- * http://nse-api-khaki.vercel.app:5000/stock?symbol=ITC&res=num
- *
- * SYMBOL examples: RELIANCE, TCS, HDFCBANK, INFY, ITC
- */
-export async function getNseStockQuote(symbol: string): Promise<StockQuote> {
-  const baseUrl = "http://nse-api-khaki.vercel.app:5000";
-  const url = `${baseUrl}/stock?symbol=${encodeURIComponent(
-    symbol.toUpperCase()
-  )}&res=num`;
+export async function getNseIndexQuote(
+  indexName: string
+): Promise<IndexQuote> {
+  const url = "https://www.nseindia.com/api/allIndices";
 
-  const payload = await fetchJson<any>(url);
+  const data = await fetchJson<any>(
+    url,
+    {},
+    {
+      Referer: "https://www.nseindia.com/market-data/live-market-indices",
+      "Accept-Language": "en-US,en;q=0.9",
+    }
+  );
 
-  if (payload?.status !== "success" || !payload?.data) {
-    throw new Error(`No stock data found for symbol=${symbol}`);
+  const list: any[] = Array.isArray(data?.data) ? data.data : [];
+
+  const match = list.find(
+    (idx) =>
+      String(idx?.index || "").toUpperCase() ===
+      indexName.toUpperCase()
+  );
+
+  if (!match) {
+    throw new Error(`Index "${indexName}" not found on NSE`);
   }
 
-  const d = payload.data;
+  const last = Number(match.last);
+  const change = Number(
+    match.change ?? match.variation ?? match.pointsChange
+  );
+  const pChange = Number(
+    match.pChange ??
+      match.percentChange ??
+      match.percentageChange
+  );
 
-  const lastPrice = Number(d.last_price);
-  const change = Number(d.change);
-  const pChange = Number(d.percent_change);
-
-  if (!Number.isFinite(lastPrice)) {
+  if (!Number.isFinite(last)) {
     throw new Error(
-      `Invalid last_price for symbol=${symbol}: ${d.last_price}`
+      `Invalid index last value for "${indexName}": ${match.last}`
     );
   }
 
   return {
-    symbol: String(payload.symbol || symbol.toUpperCase()),
-    lastPrice,
+    index: String(match.index),
+    last,
     change: Number.isFinite(change) ? change : 0,
     pChange: Number.isFinite(pChange) ? pChange : 0,
-    open: d.open != null ? Number(d.open) : undefined,
-    high: d.day_high != null ? Number(d.day_high) : undefined,
-    low: d.day_low != null ? Number(d.day_low) : undefined,
-    previousClose:
-      d.previous_close != null ? Number(d.previous_close) : undefined,
   };
 }
 
 
+
 // -------------------------------
-// 4) Gold Price in INR (GoldAPI)
+// 3) Gold Price in INR (GoldAPI)
 // -------------------------------
 
 export interface GoldPrice {
@@ -213,7 +217,7 @@ export async function getGoldPriceInInr(): Promise<GoldPrice> {
 }
 
 // -------------------------------
-// 5) FX Rate INR -> Currency (exchangerate.host)
+// 4) FX Rate INR -> Currency (exchangerate.host)
 // -------------------------------
 
 export interface FxRate {
@@ -244,7 +248,7 @@ export async function getFxRateInrTo(target: string): Promise<FxRate> {
 }
 
 // -------------------------------
-// 6) Crypto Prices in INR (CoinGecko)
+// 5) Crypto Prices in INR (CoinGecko)
 // -------------------------------
 
 export interface CryptoPrice {
@@ -277,7 +281,7 @@ export async function getCryptoPriceInInr(
 }
 
 // -------------------------------
-// 7) Global Stock Quotes (FMP)
+// 6) Global Stock Quotes (FMP)
 // -------------------------------
 
 export interface GlobalQuote {
@@ -318,7 +322,7 @@ export async function getGlobalQuote(
 }
 
 // -------------------------------
-// 8) Mutual Fund Metadata (Groww)
+// 7) Mutual Fund Metadata (Groww)
 // -------------------------------
 
 export interface MfMeta {
@@ -348,7 +352,7 @@ export async function getGrowwMfMeta(
 }
 
 // -------------------------------
-// 9) Yahoo Finance Quote via RapidAPI (Official)
+// 8) Yahoo Finance Quote via RapidAPI (Official)
 // -------------------------------
 
 export interface YahooQuote {
