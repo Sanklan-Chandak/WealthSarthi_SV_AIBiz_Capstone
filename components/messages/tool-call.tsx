@@ -36,12 +36,6 @@ const TOOL_DISPLAY_MAP: Record<string, ToolDisplay> = {
     result_label: "Fetched mutual fund NAV",
     result_icon: <Book className="w-4 h-4" />,
   },
-  nseStockQuote: {
-    call_label: "Fetching NSE stock quote",
-    call_icon: <Globe className="w-4 h-4" />,
-    result_label: "Fetched NSE stock quote",
-    result_icon: <Globe className="w-4 h-4" />,
-  },
   nseIndexQuote: {
     call_label: "Fetching index quote",
     call_icon: <Presentation className="w-4 h-4" />,
